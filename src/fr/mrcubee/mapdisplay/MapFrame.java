@@ -29,19 +29,19 @@ public interface MapFrame {
         packageVersion = packageName.substring(packageName.lastIndexOf('.') + 1);
         try {
             clazz = Class.forName("fr.mrcubee.mapdisplay." + packageVersion + ".CraftMapFrame");
-        } catch (ClassNotFoundException e) {
+        } catch (ClassNotFoundException ignored) {
             return null;
         }
         if (!MapFrame.class.isAssignableFrom(clazz))
             return null;
         try {
             constructor = clazz.getConstructor(Location.class, BlockFace.class);
-        } catch (NoSuchMethodException e) {
+        } catch (NoSuchMethodException ignored) {
             return null;
         }
         try {
             result = (MapFrame) constructor.newInstance(location, blockFace);
-        } catch (Exception e) {
+        } catch (Exception ignored) {
             return null;
         }
         return (result);

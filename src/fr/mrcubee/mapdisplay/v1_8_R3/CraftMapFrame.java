@@ -1,11 +1,12 @@
-package fr.mrcubee.mapdisplay.v1_15_R1;
+package fr.mrcubee.mapdisplay.v1_8_R3;
 
 import fr.mrcubee.mapdisplay.MapFrame;
-import net.minecraft.server.v1_15_R1.*;
+import net.minecraft.server.v1_8_R3.*;
+import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.block.BlockFace;
-import org.bukkit.craftbukkit.v1_15_R1.CraftWorld;
-import org.bukkit.craftbukkit.v1_15_R1.entity.CraftPlayer;
+import org.bukkit.craftbukkit.v1_8_R3.CraftWorld;
+import org.bukkit.craftbukkit.v1_8_R3.entity.CraftPlayer;
 import org.bukkit.entity.Player;
 import org.bukkit.map.MapPalette;
 
@@ -39,7 +40,7 @@ public class CraftMapFrame implements MapFrame {
         this.buffer = new byte[128 * 128];
         this.entityItemFrame = new EntityItemFrame(((CraftWorld) location.getWorld()).getHandle(), new BlockPosition(location.getX(), location.getY(), location.getZ()), convert(blockFace));
         itemStack = new ItemStack(Items.FILLED_MAP);
-        itemStack.getOrCreateTag().setInt("map", UUID.randomUUID().hashCode());
+        itemStack.setData(UUID.randomUUID().hashCode());
         this.entityItemFrame.setItem(itemStack);
     }
 
@@ -69,8 +70,9 @@ public class CraftMapFrame implements MapFrame {
         playerConnection = ((CraftPlayer) player).getHandle().playerConnection;
         if (playerConnection == null)
             return;
+        Bukkit.getLogger().info("Spawn !");
         playerConnection.sendPacket(new PacketPlayOutEntityDestroy(this.entityItemFrame.getId()));
-        playerConnection.sendPacket(new PacketPlayOutSpawnEntity(this.entityItemFrame));
+        playerConnection.sendPacket(new PacketPlayOutSpawnEntity(this.entityItemFrame, 71));
         playerConnection.sendPacket(new PacketPlayOutEntityMetadata(this.entityItemFrame.getId(), this.entityItemFrame.getDataWatcher(), false));
         drawn(player, null);
     }
@@ -89,7 +91,7 @@ public class CraftMapFrame implements MapFrame {
         if (image == null) {
             for (int i = 0; i < 128 * 128; i++)
                 buffer[i] = 0;
-            playerConnection.sendPacket(new PacketPlayOutMap(this.entityItemFrame.getItem().getOrCreateTag().getInt("map"), (byte) 3, true, false, new ArrayList<MapIcon>(), this.buffer, 0, 0,  128, 128));
+            playerConnection.sendPacket(new PacketPlayOutMap(this.entityItemFrame.getItem().getData(), (byte) 3, new ArrayList<MapIcon>(), this.buffer, 0, 0,  128, 128));
             return;
         }
         imageResized = MapPalette.resizeImage(image);
@@ -101,13 +103,13 @@ public class CraftMapFrame implements MapFrame {
         for(int x = 0; x < imageResized.getWidth(); ++x)
             for(int y = 0; y < imageResized.getHeight(); ++y)
                 this.buffer[y * imageResized.getWidth() + x] = bytes[y * imageResized.getWidth() + x];
-        playerConnection.sendPacket(new PacketPlayOutMap(this.entityItemFrame.getItem().getOrCreateTag().getInt("map"), (byte) 3, true, false, new ArrayList<MapIcon>(), this.buffer, 0, 0,  imageResized.getWidth(),  imageResized.getHeight()));
+        playerConnection.sendPacket(new PacketPlayOutMap(this.entityItemFrame.getItem().getData(), (byte) 3, new ArrayList<MapIcon>(), this.buffer, 0, 0,  imageResized.getWidth(),  imageResized.getHeight()));
     }
 
     @Override
     public void remove(Player player) {
         PlayerConnection playerConnection;
-
+        
         if (player == null)
             return;
         playerConnection = ((CraftPlayer) player).getHandle().playerConnection;
