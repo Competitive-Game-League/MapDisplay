@@ -2,7 +2,7 @@
 ### Displays interactive menus or images.
 
 ## Compatible versions
-- [ ] 1.16.1
+- [x] 1.16.1
 - [x] 1.15.2
 - [ ] 1.15.1
 - [ ] 1.15
