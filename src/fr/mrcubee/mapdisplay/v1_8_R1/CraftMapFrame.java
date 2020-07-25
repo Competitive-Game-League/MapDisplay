@@ -1,12 +1,11 @@
-package fr.mrcubee.mapdisplay.v1_8_R3;
+package fr.mrcubee.mapdisplay.v1_8_R1;
 
 import fr.mrcubee.mapdisplay.MapFrame;
-import net.minecraft.server.v1_8_R3.*;
-import org.bukkit.Bukkit;
+import net.minecraft.server.v1_8_R1.*;
 import org.bukkit.Location;
 import org.bukkit.block.BlockFace;
-import org.bukkit.craftbukkit.v1_8_R3.CraftWorld;
-import org.bukkit.craftbukkit.v1_8_R3.entity.CraftPlayer;
+import org.bukkit.craftbukkit.v1_8_R1.CraftWorld;
+import org.bukkit.craftbukkit.v1_8_R1.entity.CraftPlayer;
 import org.bukkit.entity.Player;
 import org.bukkit.map.MapPalette;
 

@@ -1,12 +1,11 @@
-package fr.mrcubee.mapdisplay.v1_8_R3;
+package fr.mrcubee.mapdisplay.v1_9_R2;
 
 import fr.mrcubee.mapdisplay.MapFrame;
-import net.minecraft.server.v1_8_R3.*;
-import org.bukkit.Bukkit;
+import net.minecraft.server.v1_9_R2.*;
 import org.bukkit.Location;
 import org.bukkit.block.BlockFace;
-import org.bukkit.craftbukkit.v1_8_R3.CraftWorld;
-import org.bukkit.craftbukkit.v1_8_R3.entity.CraftPlayer;
+import org.bukkit.craftbukkit.v1_9_R2.CraftWorld;
+import org.bukkit.craftbukkit.v1_9_R2.entity.CraftPlayer;
 import org.bukkit.entity.Player;
 import org.bukkit.map.MapPalette;
 
@@ -90,7 +89,7 @@ public class CraftMapFrame implements MapFrame {
         if (image == null) {
             for (int i = 0; i < 128 * 128; i++)
                 buffer[i] = 0;
-            playerConnection.sendPacket(new PacketPlayOutMap(this.entityItemFrame.getItem().getData(), (byte) 3, new ArrayList<MapIcon>(), this.buffer, 0, 0,  128, 128));
+            playerConnection.sendPacket(new PacketPlayOutMap(this.entityItemFrame.getItem().getData(), (byte) 3, true, new ArrayList<MapIcon>(), this.buffer, 0, 0,  128, 128));
             return;
         }
         imageResized = MapPalette.resizeImage(image);
@@ -102,7 +101,7 @@ public class CraftMapFrame implements MapFrame {
         for(int x = 0; x < imageResized.getWidth(); ++x)
             for(int y = 0; y < imageResized.getHeight(); ++y)
                 this.buffer[y * imageResized.getWidth() + x] = bytes[y * imageResized.getWidth() + x];
-        playerConnection.sendPacket(new PacketPlayOutMap(this.entityItemFrame.getItem().getData(), (byte) 3, new ArrayList<MapIcon>(), this.buffer, 0, 0,  imageResized.getWidth(),  imageResized.getHeight()));
+        playerConnection.sendPacket(new PacketPlayOutMap(this.entityItemFrame.getItem().getData(), (byte) 3, true, new ArrayList<MapIcon>(), this.buffer, 0, 0,  imageResized.getWidth(),  imageResized.getHeight()));
     }
 
     @Override
